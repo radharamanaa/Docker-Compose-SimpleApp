@@ -1,0 +1,18 @@
+services:
+  backend:
+    build: ./CrudWithRedis
+    ports:
+      - 8081:8080
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:latest
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    env_file:
+      - ./postgres/.env
+
+volumes:
+  postgres_data: {}
+  redistry: {}
