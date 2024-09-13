@@ -1,18 +1,21 @@
-services:
-  backend:
-    build: ./CrudWithRedis
+services: #this line starts the definition of services to be run as docker containers
+  backend: #this is the backend service
+    build: ./CrudWithRedis #this instruction will ask docker to search for a Dockerfile
+    #within this folder and build a service described in it
     ports:
-      - 8081:8080
+      - 8081:8080 #externalport:internalport -> request recieved on 8081 will be forwarded to an app running on 8080
     depends_on:
-      - postgres
+      - postgres #this line says that this service depends on postgres service.
+      # so docker will build a dependency graph and work accordingly
 
   postgres:
-    image: postgres:latest
+    image: postgres:latest # this image is directly pulled from docker hub and used without any changes
     volumes:
-      - ./postgres_data:/var/lib/postgresql/data
+      - ./postgres_data:/var/lib/postgresql/data # this is a bind mount directive which
+      # duplicates data of postres to /postgres_data
+      #so even if container crashes data is not lost and when container is run again, data stays
     env_file:
-      - ./postgres/.env
+      - ./postgres/.env #this file is needed for initial db creation, username and password of postgres. It expects a file as such
 
 volumes:
-  postgres_data: {}
-  redistry: {}
+  postgres_data: {} # need to mention volumes seperately, to declare it to docker
